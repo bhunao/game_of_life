@@ -1,25 +1,29 @@
-import basic_model
-from display import Display
+from events import base_events, algorithm_events
+from models import base_models, algorithm_models
+from display import Display, GridDisplay
 from game import Game
 
 
-display = Display()
-game = Game(display)
-example_model = basic_model.example_model
-example_model.velocity_x = 1
-game.add_object(example_model, example_model)
-player = basic_model.BasicModel(
-    name="player",
-    sprite=basic_model.Sprite(value="player"),
-    color=(255, 0, 0),
-    x=150,
-    y=150,
-    width=32,
-    height=100,
-    velocity_x=1,
-    velocity_y=1,
-    angle=0,
-    type="basic"
+# Display and Game
+display = GridDisplay(
+    cell_size=20,
+    rows=25,
+    columns=25,
 )
-game.add_object(player)
+# display = Display()
+game = Game(display)
+
+# objects
+example_model = base_models.EXAMPLE_MODEL
+player = base_models.PLAYER
+#game.add_object(player, example_model)
+#game.add_object(base_models.FOOD)
+#game.add_object(algorithm_models.self_avoiding_walker)
+
+# events
+keyboard = base_events.ARROW_KEYS
+game.add_event(keyboard)
+game.add_event(algorithm_events.game_of_life)
+
+# game main loop
 game.loop()

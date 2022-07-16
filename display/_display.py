@@ -1,40 +1,49 @@
 from typing import List
 import pygame
-from basic_model import BasicModel
+from models.base_models import ObjectModel
+from models.colors import Colors
 
 
 class Display:
-    def __init__(self, width=800, height=600, fps=60):
+    def __init__(self, width=800, height=600, fps=.1):
         self.width = width
         self.height = height
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
         self.fps = fps
+        self.background_color = Colors.BLACK
         self.running = True
 
-    def _draw_rect(self, object: BasicModel):
-        pygame.draw.rect(self.screen, object.color, (object.x+100, object.y+100, object.width, object.height))
-        pygame.draw.rect(self.screen, (255, 255, 255), (object.x+100, object.y+100, object.width, object.height), 5)
+    def _render(self):
+        # used for rendering child classes methods
+        pass
 
-    def _render_object(self, objcts: List[BasicModel]):
+    def render_rect(self, objct: ObjectModel):
+        pygame.draw.rect(self.screen, objct.color, (objct.x + 100, objct.y + 100, objct.width, objct.height))
+        pygame.draw.rect(self.screen, (255, 255, 255), (objct.x + 100, objct.y + 100, objct.width, objct.height), 5)
+
+    def render_objets(self, objcts: List[ObjectModel]):
         if not objcts:
             return
 
         for objct in objcts:
-            object_surface = pygame.Surface((objct.width, objct.height))
-            object_surface.fill(objct.color)
-            self.screen.blit(object_surface, (objct.x, objct.y))
-            print(f"rendered object: [{objct.name}|{objct.id}][{objct.x}, {objct.y}, {objct.width}, {objct.height}]")
-        return True
+            self.render_rect(objct)
 
-    def render_frame(self, objects: List[BasicModel] = None):
-        self.clock.tick(self.fps)
-        self.screen.fill((0, 0, 0))
-        self._render_object(objects)
-        self._draw_rect(objects[0])
+    def _render_surface(self, objct):
+        object_surface = pygame.Surface((objct.width, objct.height))
+        object_surface.fill(objct.color)
+        self.screen.blit(object_surface, (objct.x, objct.y))
 
+    def render_frame(self, objects: List[ObjectModel] = None):
+        self.screen.fill(self.background_color)
+        self._render()
+        self.render_objets(objects)
+        #pygame.time.delay(100)
 
+        pygame.display.flip()
         pygame.display.update()
+        self.clock.tick(self.fps)
+        pygame.time.delay(60)
 
     def get_screen(self):
         return self.screen
