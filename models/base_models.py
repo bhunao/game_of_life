@@ -46,8 +46,8 @@ FOOD = ObjectModel(
     name="food",
     sprite=Sprite(value="food"),
     color=Colors.RED,
-    x=0,
-    y=0,
+    x=9,
+    y=9,
     width=32,
     height=32
 )

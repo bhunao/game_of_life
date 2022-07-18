@@ -1,26 +1,31 @@
 from typing import List
 import pygame
+
+from configs import logging
 from models.base_models import ObjectModel
 from models.colors import Colors
 
 
 class Display:
-    def __init__(self, width=800, height=600, fps=.1):
+    def __init__(self, width=800, height=600, fps=30):
         self.width = width
         self.height = height
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
         self.fps = fps
-        self.background_color = Colors.BLACK
+        self.background_color = Colors.WHITE
         self.running = True
+        self.tick = 0
 
     def _render(self):
         # used for rendering child classes methods
         pass
 
     def render_rect(self, objct: ObjectModel):
+        logging.debug(f'Rendering rect: {objct.name}')
         pygame.draw.rect(self.screen, objct.color, (objct.x + 100, objct.y + 100, objct.width, objct.height))
         pygame.draw.rect(self.screen, (255, 255, 255), (objct.x + 100, objct.y + 100, objct.width, objct.height), 5)
+        logging.debug(f'rect rendered: {objct.name}')
 
     def render_objets(self, objcts: List[ObjectModel]):
         if not objcts:
@@ -35,15 +40,16 @@ class Display:
         self.screen.blit(object_surface, (objct.x, objct.y))
 
     def render_frame(self, objects: List[ObjectModel] = None):
+        print(f'Rendering frame: {self.tick}')
+        self.tick += 1
         self.screen.fill(self.background_color)
         self._render()
         self.render_objets(objects)
-        #pygame.time.delay(100)
 
         pygame.display.flip()
         pygame.display.update()
         self.clock.tick(self.fps)
-        pygame.time.delay(60)
+        # pygame.time.delay(10)
 
     def get_screen(self):
         return self.screen

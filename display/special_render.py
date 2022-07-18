@@ -89,8 +89,8 @@ class SpecialRender:
 
         rainbow = ribw()
         mult = len(rainbow) / (width / self.cell_size)
-        rainbow_index = x * mult
         rainbow_index = (x * mult + offset) % len(rainbow)
+        rainbow_index = x * mult
         color = rainbow[int(rainbow_index)]
 
 
@@ -98,4 +98,4 @@ class SpecialRender:
 
         r = color[0] + offset, color[1] + offset, color[2] + offset
         c = r[0] % 255, r[1] % 255, r[2] % 255
-        return color
+        return c

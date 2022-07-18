@@ -1,4 +1,9 @@
+from itertools import chain
+from typing import Tuple
+
+
 class Colors:
+    offset = 0
     RED = (255, 0, 0)
     GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
@@ -25,3 +30,28 @@ class Colors:
     LIGHT_CYAN = (0, 255, 255)
     LIGHT_ORANGE = (255, 255, 0)
     LIGHT_BROWN = (255, 128, 128)
+    DARKER_GRAY = (85, 85, 85)
+
+    @classmethod
+    def rainbow_color_from_x_y(cls, screen_size: Tuple[int, int], cell_size: int, x: int):
+        rainbow = []
+        for r, g, b in zip(
+            chain(reversed(range(256)), [0] * 256),
+            chain(range(256), reversed(range(256))),
+            chain([0] * 256, range(256))):
+            rainbow.append((r, g, b))
+
+
+        width, height = screen_size
+
+        mult = len(rainbow) / (width / cell_size)
+        # rainbow_index = (x * mult + cls.offset) % len(rainbow)
+        rainbow_index = x * mult
+        color = rainbow[int(rainbow_index)]
+
+        cls.offset += .01
+
+        r = color[0] + cls.offset, color[1] + cls.offset, color[2] + cls.offset
+        c = r[0] % 255, r[1] % 255, r[2] % 255
+        return c
+

@@ -1,4 +1,4 @@
-from actions.actions import key_down, respawn
+from actions.actions import key_down, respawn, brain
 from events.event import Event, EventProperties
 
 RESPAW_ON_DEATH = Event(
@@ -18,4 +18,13 @@ ARROW_KEYS = Event(
         value=1
     ),
     action=key_down
+)
+BRAIN = Event(
+    name="brain",
+    type="brain",
+    properties=EventProperties(
+        target_objects=["player", "food"],
+        value=1
+    ),
+    action=brain
 )
