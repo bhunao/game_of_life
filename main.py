@@ -45,9 +45,6 @@ def draw():
         for x in xrange:
             if table[y][x] == 1:
                 pyxel.pset(x, y, 15)
-            else:
-                continue
-                pyxel.pset(x, y, neighbours(x, y))
 
 
 def update():
@@ -71,7 +68,7 @@ def update():
         n = neighbours(x, y)
         if (n == 2 or n == 3) and alive:
             _table[y][x] = 1
-        elif n == 3 or n == 2:
+        elif n == 3:
             _table[y][x] = 1
         else:
             _table[y][x] = 0
